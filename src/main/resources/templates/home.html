@@ -12,8 +12,8 @@
 
     <!-- File Upload Form -->
     <h3>Upload a file:</h3>
-    <form method="post" enctype="multipart/form-data" th:action="@{/upload}">
-        <input type="file" name="file" accept="image/*"/>
+    <form  enctype="multipart/form-data" th:action="@{/upload}" method="post">
+        <input type="file" name="file" />
         <button type="submit">Upload</button>
     </form>
 </body>

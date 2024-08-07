@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 
 @Controller
 public class MainController{
@@ -36,17 +37,19 @@ public class MainController{
     @PostMapping("/upload")
     public String handleFileUpload(@RequestParam("file") MultipartFile file, Model model) {
         logger.info("Handling file upload");
-
+        int a = 0;
         if (!file.isEmpty()) {
             try {
+                logger.info("In try in Handling file upload");
                 // Save the file to a local directory
                 String uploadDir = "uploads/";
                 File directory = new File(uploadDir);
                 if (!directory.exists()) {
                     directory.mkdir();
                 }
-                File uploadedFile = new File(uploadDir + file.getOriginalFilename());
-                file.transferTo(uploadedFile);
+//                todo proper path
+                File uploadedFile = new File("/mnt/c/Users/kacza/Desktop/img/1.bmp");
+                file.transferTo(new File("/home/tkacza/AAA/programing/Sigla/uploads/1uploaded.bmp"));
                 model.addAttribute("message", "File uploaded successfully: " + file.getOriginalFilename());
             } catch (IOException e) {
                 logger.error("Error while uploading file", e);
