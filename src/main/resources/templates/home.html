@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <title>Spring Security Example</title>
+</head>
+<body>
+    <h1>Welcome!</h1>
+
+    <p>Click <a th:href="@{/hello}">here</a> to see a greeting.</p>
+    <h2>Wynik obliczeń: <span th:text="${calculationResult}"></span></h2>
+
+    <!-- File Upload Form -->
+    <h3>Upload a file:</h3>
+    <form method="post" enctype="multipart/form-data" th:action="@{/upload}">
+        <input type="file" name="file" accept="image/*"/>
+        <button type="submit">Upload</button>
+    </form>
+</body>
+</html>
