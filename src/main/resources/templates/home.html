@@ -6,10 +6,6 @@
 </head>
 <body>
     <h1>Welcome!</h1>
-
-    <p>Click <a th:href="@{/hello}">here</a> to see a greeting.</p>
-    <h2>Wynik obliczeń: <span th:text="${calculationResult}"></span></h2>
-
     <!-- File Upload Form -->
     <h3>Upload a file:</h3>
     <form  enctype="multipart/form-data" th:action="@{/upload}" method="post">
