@@ -12,5 +12,13 @@
         <input type="file" name="file" />
         <button type="submit">Upload</button>
     </form>
+    <div th:if="${sigla != null}">
+        <h3>Sigla Extracted:</h3>
+        <ul>
+            <li th:each="item : ${sigla}" th:text="${item}">Sigla item</li>
+        </ul>
+    </div>
+
+
 </body>
 </html>

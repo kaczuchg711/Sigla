@@ -11,25 +11,36 @@ import org.w3c.dom.Node;
 import java.io.File;
 import java.util.Iterator;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class ImageDPIReader {
 
-    public static int[] getDPI(File file) throws Exception {
-        ImageInputStream inputStream = ImageIO.createImageInputStream(file);
-        Iterator<ImageReader> readers = ImageIO.getImageReaders(inputStream);
+    private static final Logger logger = LoggerFactory.getLogger(ImageDPIReader.class);
 
-        if (readers.hasNext()) {
-            ImageReader reader = readers.next();
-            reader.setInput(inputStream);
+    public static int[] getDPI(File file)  {
+        try {
+            ImageInputStream inputStream = ImageIO.createImageInputStream(file);
+            Iterator<ImageReader> readers = ImageIO.getImageReaders(inputStream);
 
-            IIOMetadata metadata = reader.getImageMetadata(0);
-            String[] names = metadata.getMetadataFormatNames();
-            for (String name : names) {
-                Node root = metadata.getAsTree(name);
-                int[] dpi = getDPIFromNode(root);
-                if (dpi != null) {
-                    return dpi;
+            if (readers.hasNext()) {
+                ImageReader reader = readers.next();
+                reader.setInput(inputStream);
+
+                IIOMetadata metadata = reader.getImageMetadata(0);
+                String[] names = metadata.getMetadataFormatNames();
+                for (String name : names) {
+                    Node root = metadata.getAsTree(name);
+                    int[] dpi = getDPIFromNode(root);
+                    if (dpi != null) {
+                        return dpi;
+                    }
                 }
             }
+        } catch (java.lang.Exception e) {
+            logger.warn("problem with reading dpi set default {300, 300}");
+            return new int[]{300, 300};  // lub inna wartość, którą uznasz za odpowiednią
+
         }
         return null;
     }
