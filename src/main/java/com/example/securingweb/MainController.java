@@ -103,9 +103,11 @@ public class MainController {
             // Rozpoznanie tekstu na obrazie z BufferedImage
             String text = tesseract.doOCR(bufferedImage);
 
-            // Wyodrębnienie sigli z tekstu
-            return extractSigla(text);
-
+            String[] sigla = extractSigla(text);
+            for (int i = 0; i < sigla.length; i++) {
+                sigla[i] = sigla[i].replace("\n", " ");
+            }
+            return sigla;
         } catch (IOException | TesseractException e) {
             e.printStackTrace();
             logger.warn("problem with reading sigla. empty table returned");
@@ -128,7 +130,7 @@ public class MainController {
 
     private String[] extractSigla(String text) {
         // Wzorzec regex dla sigli biblijnych
-        Pattern pattern = Pattern.compile("\\b(?:\\d*\\s*[A-Za-z]+\\s*\\d+,?\\s*\\d+(?:-\\d+)?(?:,\\d+)?)\\b");
+        Pattern pattern = Pattern.compile("\\b(?:\\d*\\s*[1-3]?[A-Za-z]{2,}\\s*\\d{1,3},\\s*\\d{1,3}(?:-\\d{1,3})?)\\b");
 
         Matcher matcher = pattern.matcher(text);
 

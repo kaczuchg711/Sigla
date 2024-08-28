@@ -9,7 +9,7 @@
     <!-- File Upload Form -->
     <h3>Upload a file:</h3>
     <form  enctype="multipart/form-data" th:action="@{/upload}" method="post">
-        <input type="file" name="file" />
+        <input type="file" name="photo_file" />
         <button type="submit">Upload</button>
     </form>
     <div th:if="${sigla != null}">
