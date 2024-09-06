@@ -54,9 +54,8 @@ public class MainController {
                 // Save the file to a local directory
                 String uploadDir = "uploaded_img/";
                 File directory = new File(uploadDir);
-                if (!directory.exists()) {
+                if (!directory.exists())
                     directory.mkdir();
-                }
                 String projectDir = System.getProperty("user.dir");
                 File uploadFile = new File(projectDir + "/uploaded_img/" + file.getOriginalFilename());
                 file.transferTo(uploadFile);
@@ -106,6 +105,7 @@ public class MainController {
             String[] sigla = extractSigla(text);
             for (int i = 0; i < sigla.length; i++) {
                 sigla[i] = sigla[i].replace("\n", " ");
+                sigla[i] = sigla[i].replace("  ", " ");
             }
             return sigla;
         } catch (IOException | TesseractException e) {
