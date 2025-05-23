@@ -15,31 +15,14 @@ import org.springframework.security.web.SecurityFilterChain;
 public class WebSecurityConfig {
 
 	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http
-				.authorizeHttpRequests((requests) -> requests
-						.requestMatchers("/", "/home", "/upload", "/resources/**").permitAll()
-						.anyRequest().authenticated()
+				.authorizeHttpRequests(auth -> auth
+						.anyRequest().permitAll()
 				)
-				.formLogin((form) -> form
-						.loginPage("/login")
-						.permitAll()
-				)
-				.logout((logout) -> logout.permitAll())
-				.csrf(csrf -> csrf.disable());
-
+				.csrf(csrf -> csrf.disable()) // jeśli używasz uploadu
+				.formLogin(login -> login.disable())
+				.logout(logout -> logout.disable());
 		return http.build();
-	}
-
-	@Bean
-	public UserDetailsService userDetailsService() {
-		UserDetails user =
-				User.withDefaultPasswordEncoder()
-						.username("user")
-						.password("password")
-						.roles("USER")
-						.build();
-
-		return new InMemoryUserDetailsManager(user);
 	}
 }

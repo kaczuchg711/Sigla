@@ -8,9 +8,10 @@
     <h1>Welcome!</h1>
     <!-- File Upload Form -->
     <h3>Upload a file:</h3>
-    <form  enctype="multipart/form-data" th:action="@{/upload}" method="post">
-        <input type="file" name="photo_file" />
-        <button type="submit">Upload</button>
+    <form method="post" action="/upload" enctype="multipart/form-data">
+        <label for="file">Wybierz plik:</label>
+        <input type="file" id="file" name="file" accept="image/*" required />
+        <button type="submit">Wyślij</button>
     </form>
     <div th:if="${sigla != null}">
         <h3>Sigla Extracted:</h3>
