@@ -1,6 +1,8 @@
 package com.example.securingweb;
 
 import com.example.securingweb.helpers.ImageDPIReader;
+import com.example.securingweb.model.BiblePassage;
+import com.example.securingweb.service.BibleTextService;
 import net.sourceforge.tess4j.TessAPI;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +26,7 @@ import javax.imageio.ImageIO;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -34,6 +37,11 @@ import javax.imageio.ImageReader;
 public class MainController {
 
     private static final Logger logger = LoggerFactory.getLogger(MainController.class);
+    private final BibleTextService bibleTextService;
+
+    public MainController(BibleTextService bibleTextService) {
+        this.bibleTextService = bibleTextService;
+    }
 
     @GetMapping({"/"})
     public String home(Model model) {
@@ -41,6 +49,7 @@ public class MainController {
 
         // Pass calculation result to the model
         model.addAttribute("message", "Witamy na stronie początkowej!");
+        model.addAttribute("passages", Collections.emptyList());
 
         return "home"; // Return the name of the Thymeleaf template
     }
@@ -68,13 +77,17 @@ public class MainController {
                 System.out.println("AAAAAA");
                 System.out.println(Arrays.toString(sigla));
                 model.addAttribute("sigla", sigla);
+                List<BiblePassage> passages = bibleTextService.resolvePassages(Arrays.asList(sigla));
+                model.addAttribute("passages", passages);
 
             } catch (IOException e) {
                 logger.error("Error while uploading file", e);
                 model.addAttribute("message", "Failed to upload file: " + e.getMessage());
+                model.addAttribute("passages", Collections.emptyList());
             }
         } else {
             model.addAttribute("message", "Please select a file to upload.");
+            model.addAttribute("passages", Collections.emptyList());
         }
         logger.info("before redirect");
         return "home";

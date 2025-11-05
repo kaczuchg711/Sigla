@@ -20,6 +20,21 @@
         </ul>
     </div>
 
+    <div th:if="${passages != null and !passages.isEmpty()}">
+        <h3>Tekst biblijny</h3>
+        <div th:each="passage : ${passages}">
+            <h4 th:text="${passage.originalReference}">Odniesienie</h4>
+            <div th:if="${passage.hasError()}">
+                <p th:text="${passage.errorMessage}" style="color: darkred;">Brak danych</p>
+            </div>
+            <ul th:if="${!passage.hasError()}">
+                <li th:each="verse : ${passage.verses}">
+                    <strong th:text="${verse.verseNumber} + '.'">1.</strong>
+                    <span th:text="${verse.text}">Tekst wersetu</span>
+                </li>
+            </ul>
+        </div>
+    </div>
 
 </body>
 </html>

@@ -1,0 +1,15 @@
+[
+  {"book": "GEN", "chapter": 1, "verse": 1, "text": "Na początku stworzył Bóg niebo i ziemię."},
+  {"book": "GEN", "chapter": 1, "verse": 2, "text": "A ziemia była niekształcona i próżna; i ciemność była nad przepaścią; a Duch Boży unosił się nad wodami."},
+  {"book": "EXOD", "chapter": 20, "verse": 1, "text": "I mówił Bóg wszystkie te słowa, mówiąc;"},
+  {"book": "EXOD", "chapter": 20, "verse": 2, "text": "Jam jest Pan, Bóg twój, który cię wywiódł z ziemi egipskiej, z domu niewoli."},
+  {"book": "PS", "chapter": 23, "verse": 1, "text": "Pan jest pasterzem moim, niczego mi nie braknie."},
+  {"book": "PS", "chapter": 23, "verse": 2, "text": "Na niwach zielonych sprawia, że odpoczywam; nad wody spokojne wiedzie mię."},
+  {"book": "MAT", "chapter": 5, "verse": 3, "text": "Błogosławieni ubodzy w duchu; albowiem ich jest królestwo niebieskie."},
+  {"book": "JOHN", "chapter": 3, "verse": 16, "text": "Albowiem tak Bóg umiłował świat, że Syna swego jednorodzonego dał, aby każdy, kto weń wierzy, nie zginął, ale miał żywot wieczny."},
+  {"book": "JOHN", "chapter": 3, "verse": 17, "text": "Bo nie posłał Bóg Syna swego na świat, aby sądził świat, ale aby świat był przez niego zbawiony."},
+  {"book": "1COR", "chapter": 13, "verse": 4, "text": "Miłość jest cierpliwa, miłość jest dobrotliwa; miłość nie zazdrości; miłość nie przechwala się, nie nadyma się;"},
+  {"book": "1COR", "chapter": 13, "verse": 5, "text": "Nie czyni nieprzystojnie, nie szuka swego, nie unosi się, nie myśli złego;"},
+  {"book": "1COR", "chapter": 13, "verse": 6, "text": "Nie raduje się z niesprawiedliwości, ale się raduje z prawdy;"},
+  {"book": "1COR", "chapter": 13, "verse": 7, "text": "Wszystko zakrywa, wszystkiemu wierzy, wszystkiego się spodziewa, wszystko znosi."}
+]
