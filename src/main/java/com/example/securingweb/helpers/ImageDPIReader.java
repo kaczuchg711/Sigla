@@ -18,31 +18,47 @@ public class ImageDPIReader {
 
     private static final Logger logger = LoggerFactory.getLogger(ImageDPIReader.class);
 
+    private static final int DEFAULT_DPI_VALUE = 300;
+
     public static int[] getDPI(File file)  {
-        try {
-            ImageInputStream inputStream = ImageIO.createImageInputStream(file);
+        try (ImageInputStream inputStream = ImageIO.createImageInputStream(file)) {
+            if (inputStream == null) {
+                logger.warn("Could not open image input stream, using default DPI");
+                return defaultDpi();
+            }
+
             Iterator<ImageReader> readers = ImageIO.getImageReaders(inputStream);
 
-            if (readers.hasNext()) {
+            while (readers.hasNext()) {
                 ImageReader reader = readers.next();
-                reader.setInput(inputStream);
+                try {
+                    reader.setInput(inputStream);
 
-                IIOMetadata metadata = reader.getImageMetadata(0);
-                String[] names = metadata.getMetadataFormatNames();
-                for (String name : names) {
-                    Node root = metadata.getAsTree(name);
-                    int[] dpi = getDPIFromNode(root);
-                    if (dpi != null) {
-                        return dpi;
+                    IIOMetadata metadata = reader.getImageMetadata(0);
+                    String[] names = metadata.getMetadataFormatNames();
+                    for (String name : names) {
+                        Node root = metadata.getAsTree(name);
+                        int[] dpi = getDPIFromNode(root);
+                        if (dpi != null) {
+                            return dpi;
+                        }
                     }
+                } finally {
+                    reader.dispose();
                 }
             }
+
+            logger.warn("DPI metadata not found, using default DPI");
         } catch (java.lang.Exception e) {
             logger.warn("problem with reading dpi set default {300, 300}");
-            return new int[]{300, 300};  // lub inna wartość, którą uznasz za odpowiednią
+            return defaultDpi();  // lub inna wartość, którą uznasz za odpowiednią
 
         }
-        return null;
+        return defaultDpi();
+    }
+
+    private static int[] defaultDpi() {
+        return new int[]{DEFAULT_DPI_VALUE, DEFAULT_DPI_VALUE};
     }
 
     private static int[] getDPIFromNode(Node node) {

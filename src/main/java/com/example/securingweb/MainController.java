@@ -71,11 +71,6 @@ public class MainController {
                 file.transferTo(uploadFile);
                 model.addAttribute("message", "File uploaded successfully: " + file.getOriginalFilename());
                 String[] sigla = getSiglaFromImage(uploadFile);
-                System.out.println("AAAAAA");
-                System.out.println("AAAAAA");
-                System.out.println("AAAAAA");
-                System.out.println("AAAAAA");
-                System.out.println(Arrays.toString(sigla));
                 model.addAttribute("sigla", sigla);
                 List<BiblePassage> passages = bibleTextService.resolvePassages(Arrays.asList(sigla));
                 model.addAttribute("passages", passages);
@@ -97,6 +92,10 @@ public class MainController {
         try {
             BufferedImage bufferedImage = ImageIO.read(file);
             int[] dpi = ImageDPIReader.getDPI(file);
+            if (dpi == null || dpi.length < 2 || dpi[0] <= 0 || dpi[1] <= 0) {
+                logger.warn("Invalid DPI information returned, using default 300x300");
+                dpi = new int[]{300, 300};
+            }
 
             int expectedDPI = 300; // Ustalona wartość DPI, której oczekujesz
             double scaleX = (double) expectedDPI / dpi[0];
@@ -128,8 +127,8 @@ public class MainController {
             logger.warn("problem with reading sigla. empty table returned");
             return new String[0]; // W przypadku błędu zwróć pustą tablicę
         } catch (Exception e) {
-            logger.info("Problem in getSiglaFromImage");
-            throw new RuntimeException(e);
+            logger.info("Problem in getSiglaFromImage", e);
+            return new String[0];
         }
     }
 
