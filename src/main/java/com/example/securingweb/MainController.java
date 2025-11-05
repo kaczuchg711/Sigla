@@ -1,6 +1,8 @@
 package com.example.securingweb;
 
 import com.example.securingweb.helpers.ImageDPIReader;
+import com.example.securingweb.model.BiblePassage;
+import com.example.securingweb.service.BibleTextService;
 import net.sourceforge.tess4j.TessAPI;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +26,7 @@ import javax.imageio.ImageIO;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -34,6 +37,11 @@ import javax.imageio.ImageReader;
 public class MainController {
 
     private static final Logger logger = LoggerFactory.getLogger(MainController.class);
+    private final BibleTextService bibleTextService;
+
+    public MainController(BibleTextService bibleTextService) {
+        this.bibleTextService = bibleTextService;
+    }
 
     @GetMapping({"/"})
     public String home(Model model) {
@@ -41,6 +49,7 @@ public class MainController {
 
         // Pass calculation result to the model
         model.addAttribute("message", "Witamy na stronie początkowej!");
+        model.addAttribute("passages", Collections.emptyList());
 
         return "home"; // Return the name of the Thymeleaf template
     }
@@ -62,19 +71,18 @@ public class MainController {
                 file.transferTo(uploadFile);
                 model.addAttribute("message", "File uploaded successfully: " + file.getOriginalFilename());
                 String[] sigla = getSiglaFromImage(uploadFile);
-                System.out.println("AAAAAA");
-                System.out.println("AAAAAA");
-                System.out.println("AAAAAA");
-                System.out.println("AAAAAA");
-                System.out.println(Arrays.toString(sigla));
                 model.addAttribute("sigla", sigla);
+                List<BiblePassage> passages = bibleTextService.resolvePassages(Arrays.asList(sigla));
+                model.addAttribute("passages", passages);
 
             } catch (IOException e) {
                 logger.error("Error while uploading file", e);
                 model.addAttribute("message", "Failed to upload file: " + e.getMessage());
+                model.addAttribute("passages", Collections.emptyList());
             }
         } else {
             model.addAttribute("message", "Please select a file to upload.");
+            model.addAttribute("passages", Collections.emptyList());
         }
         logger.info("before redirect");
         return "home";
@@ -84,6 +92,10 @@ public class MainController {
         try {
             BufferedImage bufferedImage = ImageIO.read(file);
             int[] dpi = ImageDPIReader.getDPI(file);
+            if (dpi == null || dpi.length < 2 || dpi[0] <= 0 || dpi[1] <= 0) {
+                logger.warn("Invalid DPI information returned, using default 300x300");
+                dpi = new int[]{300, 300};
+            }
 
             int expectedDPI = 300; // Ustalona wartość DPI, której oczekujesz
             double scaleX = (double) expectedDPI / dpi[0];
@@ -115,8 +127,8 @@ public class MainController {
             logger.warn("problem with reading sigla. empty table returned");
             return new String[0]; // W przypadku błędu zwróć pustą tablicę
         } catch (Exception e) {
-            logger.info("Problem in getSiglaFromImage");
-            throw new RuntimeException(e);
+            logger.info("Problem in getSiglaFromImage", e);
+            return new String[0];
         }
     }
 
